@@ -5,6 +5,7 @@ import { NavController, ViewWillLeave } from '@ionic/angular';
 import { updateDoc, serverTimestamp } from "firebase/firestore";
 import { BehaviorSubject, SubscriptionLike } from 'rxjs';
 import { debounceTime, map, skipWhile, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { AuthServiceService } from 'src/app/services/auth-service.service';
 
 @Component({
   selector: 'app-chat',
@@ -14,7 +15,7 @@ import { debounceTime, map, skipWhile, takeUntil, takeWhile, tap } from 'rxjs/op
 export class ChatPage implements OnInit,ViewWillLeave {
 
   subscriptions: SubscriptionLike[] = [];
-  constructor(private navCtrl: NavController, private route: ActivatedRoute, private router: Router, public db: AngularFirestore) { }
+  constructor(public authService: AuthServiceService, private navCtrl: NavController, private route: ActivatedRoute, private router: Router, public db: AngularFirestore) { }
 
   @ViewChild('content') private content: any;
 
@@ -23,13 +24,14 @@ export class ChatPage implements OnInit,ViewWillLeave {
   imageBg = 'chat-bg';
 
   chatID: any;
+  chatData: any;
 
   user = {id: 1, first_name: "Mathias", last_name: "Johannsen", email: "mathias@johannsen.at", avatar: "https://lh3.googleusercontent.com/a-/AOh14GhzaFkQNod1WOU71bT_VxqFkQ8O1qs_bBHf_2Ut=s83-c-mo"};
   chatName: any;
   messages: any = []
   newMsg: any = '';
 
-  currentUser: any = "pw2pzfCKTlJS5dlTAlmG"
+  currentUser: any
 
   currLength: any = 10
 
@@ -40,8 +42,11 @@ export class ChatPage implements OnInit,ViewWillLeave {
   }
 
   async ngOnInit() {
-    console.log(this.messages, this.users)
     this.paramCheck();
+    this.authService.userDetails().subscribe(async (user: any) => {
+      this.currentUser = user.uid
+      console.log(this.currentUser)
+    })
     await this.loadUsers()
     this.subscriptions.push(
       this.scrolling.pipe(
@@ -90,6 +95,7 @@ export class ChatPage implements OnInit,ViewWillLeave {
         this.content.scrollToBottom(200)
 
         this.messages.push(temp)
+        console.log(this.messages)
       });
         setTimeout(() => {
           this.content.scrollToBottom(200)
@@ -124,14 +130,14 @@ export class ChatPage implements OnInit,ViewWillLeave {
   }
 
   async sendMessage(){
+    this.db.collection('chats').doc(this.chatID).update({
+      last_message: this.newMsg
+    })
+
     this.db.collection('chats').doc(this.chatID).collection('messages').add({
       message: this.newMsg,
       user: this.currentUser,
       timestamp: this.getTimeStamp()
-    })
-
-    this.db.collection('chats').doc(this.chatID).update({
-      last_message: this.newMsg
     })
 
     this.newMsg = '';
@@ -143,7 +149,11 @@ export class ChatPage implements OnInit,ViewWillLeave {
   paramCheck(){
     this.route.queryParams.subscribe(params => {
       if (params && params.chat) {
-        this.chatID = JSON.parse(params.chat);
+        this.chatData = JSON.parse(params.chat);
+        this.chatID = this.chatData.cid
+        this.db.collection('users').doc(this.chatData.ouid).ref.onSnapshot(async (other_user: any) => {
+          this.chatData.last_seen = other_user.data().last_seen
+        })
       }
       else{
         this.router.navigateByUrl('home')

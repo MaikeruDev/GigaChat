@@ -1,17 +1,17 @@
 <ion-header>
 <ion-toolbar clasS="test">
   <ion-buttons slot="start">
-    <ion-back-button text="" defaultHref="Chats"></ion-back-button>
+    <ion-back-button text="" defaultHref="chats"></ion-back-button>
   </ion-buttons>
 
   <ion-item lines="none" class="user-toolbar" *ngIf="user">
     <ion-avatar slot="start">
-      <img [src]="user.avatar">
+      <img src="{{chatData.avatar}}">
     </ion-avatar>
     <ion-label class="ion-no-margin">
-      {{user.first_name}} {{user.last_name}}
+      {{chatData.name}}
       <p class="ion-no-margin">
-        two minutes ago
+        {{chatData.last_seen}}
       </p>
     </ion-label>
   </ion-item>
@@ -58,13 +58,18 @@
       <ion-icon slot="icon-only" name="add-outline" color="primary"></ion-icon>
     </ion-button>
   </ion-buttons>
-  <ion-textarea autoGrow rows="1"></ion-textarea>
-  <ion-buttons slot="end">
+  <ion-textarea autoGrow rows="1" [(ngModel)]="newMsg"></ion-textarea>
+  <ion-buttons slot="end" *ngIf="!newMsg.trim()">
     <ion-button>
       <ion-icon slot="icon-only" name="camera-outline" color="primary"></ion-icon>
     </ion-button>
     <ion-button>
       <ion-icon slot="icon-only" name="mic-outline" color="primary"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-buttons slot="end" *ngIf="newMsg.trim()">
+    <ion-button (click)="sendMessage()">
+      <ion-icon slot="icon-only" name="send" color="primary"></ion-icon>
     </ion-button>
   </ion-buttons>
 </ion-toolbar>

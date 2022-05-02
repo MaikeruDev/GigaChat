@@ -1,9 +1,70 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
+<ion-header class="ion-no-border" mode="md">
+  <ion-img src="https://i-com.cdn.gaijin.net/monthly_2021_07/859175287_gigachadtyyny.thumb.jpg.6233ed241f9b714b37e582aaa2bcf2fe.jpg"></ion-img>
 </ion-header>
 
-<ion-content>
+<ion-content mode="md" *ngIf="currView == 'login'">
+  <ion-card *ngIf="!scannerEnabled">
+    <ion-card-header>
+      <ion-card-title color="primary">Sign in</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-label position="floating">E-Mail </ion-label>
+        <ion-input [(ngModel)]="email" type="email" inputmode="email" pattern="email" size="email"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="floating">Password </ion-label>
+        <ion-input [(ngModel)]="password" type="password" inputmode="password" pattern="password" size="password"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <p (click)="navTo.navTo('forgot-password')" style="cursor: pointer;" id="forgotPasswordText" class="ion-text-center">Forgot Password?</p>
+      </ion-item>
+      <ion-button expand="full" (click)="authService.signInWithEmailAndPassword(email, password)">
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+        Login
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+  <ion-text class="ion-text-center" id="ionRegisterText"  *ngIf="!scannerEnabled">
+    <p id="registerText">Not signed up yet?</p>
+  </ion-text>
+  <ion-button (click)="setMenu('register')" expand="block" fill="outline" id="registerBtn"  *ngIf="!scannerEnabled">
+    Sign up
+  </ion-button>
+</ion-content>  
 
+<ion-content mode="md" *ngIf="currView == 'register'">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title color="primary">Sign up</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-label position="floating">E-Mail </ion-label>
+        <ion-input [(ngModel)]="email" type="email"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="floating">Username </ion-label>
+        <ion-input [(ngModel)]="username" type="text"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="floating">Password </ion-label>
+        <ion-input [(ngModel)]="password" type="password"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="floating">Confirm Password</ion-label>
+        <ion-input [(ngModel)]="passwordConfirm" type="password"></ion-input>
+      </ion-item>
+      <ion-button expand="full" (click)="authService.createUserWithEmailAndPassword(email, password, passwordConfirm, username)">
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+        Register
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+  <ion-text class="ion-text-center" id="ionRegisterText">
+    <p id="registerText">Already signed up?</p>
+  </ion-text>
+  <ion-button (click)="setMenu('login')" expand="block" fill="outline" id="registerBtn">
+    Sign in
+  </ion-button>
 </ion-content>

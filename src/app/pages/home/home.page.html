@@ -6,10 +6,10 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title>Chats</ion-title>
+    <ion-title>GigaChats</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="newChat()">
         <ion-icon slot="icon-only" name="create-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -23,7 +23,7 @@
 <ion-content>
   <ion-header collapse="condense" *ngIf="platformService.isIOS">
     <ion-toolbar>
-      <ion-title size="large">Chats</ion-title>
+      <ion-title size="large">GigaChats</ion-title>
     </ion-toolbar>
     <ion-toolbar>
       <ion-searchbar placeholder="Search"></ion-searchbar>
@@ -31,13 +31,13 @@
   </ion-header>
 
   <ion-list>
-    <ion-item button detail="false" (click)="openChat('5RC14gRWLT4DUZwMESIz')" *ngFor="let chat of chatsList" [routerLink]="['/chat-detail', chat.id]"
+    <ion-item button detail="false" (click)="openChat(chat)" *ngFor="let chat of chatsList" [routerLink]="['/chat-detail', chat.id]"
       routerdirection="forward">
       <ion-avatar slot="start" style="width: 52px;height:52px">
         <img [src]="chat.avatar">
       </ion-avatar>
       <ion-label>
-        {{chat.first_name}} {{chat.last_name}}
+        {{chat.name}}
         <small class="ion-float-right">
           <ion-text color="medium">17.10.2020</ion-text>
         </small>
