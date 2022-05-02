@@ -1,42 +1,71 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>{{chatID}}</ion-title>
-  </ion-toolbar>
+<ion-toolbar clasS="test">
+  <ion-buttons slot="start">
+    <ion-back-button text="" defaultHref="home"></ion-back-button>
+  </ion-buttons>
+
+  <ion-item lines="none" class="user-toolbar" *ngIf="user">
+    <ion-avatar slot="start">
+      <img [src]="user.avatar">
+    </ion-avatar>
+    <ion-label class="ion-no-margin">
+      {{user.first_name}} {{user.last_name}}
+      <p class="ion-no-margin">
+        two minutes ago
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-buttons slot="end">
+    <ion-button>
+      <ion-icon style="width: 25px;" slot="icon-only" name="videocam-outline"></ion-icon>
+    </ion-button>
+    <ion-button>
+      <ion-icon style="width: 20px;" slot="icon-only" name="call-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
 </ion-header>
 
-<ion-content #content>
-  <ion-button color="secondary" (click)="loadMore()" expand="block" fill="clear" shape="round">
-    Load more...
-  </ion-button>
-  <ion-grid>
-    <ion-row *ngFor="let message of messages">
-      <ion-col size="9" *ngIf="currentUser !== message.user" class="message other-message">
-        <b>{{ message.user }}</b><br>
-        <span>{{ message.message }}</span>
-        <div class="time" text-right><br>
-        {{ message.timestamp.seconds * 1000 | date:'dd/MM/yyyy, h:mm' }}</div>
-      </ion-col>
-      <ion-col offset="3" size="9" *ngIf="currentUser === message.user" class="message my-message">
-        <b>{{ message.user }}</b><br>
-        <span>{{ message.message }}</span>
-        <div class="time" text-right><br>
-        {{ message.timestamp.seconds * 1000 | date:'dd/MM/yy, h:mm' }}</div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ion-content [scrollY]="isAllowScroll" [scrollEvents]="isAllowScrollEvents" (ionScrollStart)="logScrollStart()"
+(ionScroll)="logScrolling($event)" (ionScrollEnd)="logScrollEnd()" id="content" #content>
+<ion-button color="primary" (click)="loadMore()" expand="block" fill="clear" shape="round">
+  Load more...
+</ion-button>
+<ion-grid>
+  <ion-row *ngFor="let message of messages">
+    <ion-col size="9" *ngIf="currentUser !== message.user" class="message other-message">
+      <b>{{ message.username }}</b><br>
+      <span>{{ message.message }}</span>
+      <div class="time" text-right><br>
+      {{ message.timestamp.seconds * 1000 | date:'dd/MM/yyyy, h:mm' }}</div>
+    </ion-col>
+    <ion-col offset="3" size="9" *ngIf="currentUser === message.user" class="message my-message">
+      <b>{{ message.username }}</b><br>
+      <span>{{ message.message }}</span>
+      <div class="time" text-right><br>
+      {{ message.timestamp.seconds * 1000 | date:'dd/MM/yy, h:mm' }}</div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<!-- <app-chat-group [chats]="chats" [isPageScrolling]="isPageScrolling"></app-chat-group> -->
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <ion-row align-items-center no-padding>
-      <ion-col size="10">
-        <textarea autosize maxRows="3" [(ngModel)]="newMsg" class="message-input"></textarea>
-      </ion-col>
-      <ion-col size="2">
-        <ion-button expand="block" fill="clear" color="primary" [disabled]="!newMsg.trim()" class="msg-btn" (click)="sendMessage()">
-          <ion-icon slot="icon-only" name="send"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
+<ion-footer class="ion-no-border">
+<ion-toolbar style="height: auto;" color="light">
+  <ion-buttons slot="start">
+    <ion-button>
+      <ion-icon slot="icon-only" name="add-outline" color="primary"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-textarea autoGrow rows="1"></ion-textarea>
+  <ion-buttons slot="end">
+    <ion-button>
+      <ion-icon slot="icon-only" name="camera-outline" color="primary"></ion-icon>
+    </ion-button>
+    <ion-button>
+      <ion-icon slot="icon-only" name="mic-outline" color="primary"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
 </ion-footer>

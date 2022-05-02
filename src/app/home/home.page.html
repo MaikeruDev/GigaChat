@@ -1,85 +1,53 @@
-<ion-header class="ion-no-border" mode="ios">
-  <ion-toolbar class="ion-padding">
-    <ion-icon name="menu-outline" slot="start"></ion-icon>
-    <ion-title>GigaChat</ion-title>
-    <ion-icon name="camera-outline" slot="end"></ion-icon>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        Change
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Chats</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="platformService.isAndroid">
+    <ion-searchbar placeholder="Search"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="tabs ion-padding">
-    <ion-segment value="chats" (ionChange)="segmentChange($event)">
-      <ion-segment-button value="chats">
-        <ion-label>Chats</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="friends">
-        <ion-label>Friends</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </div>
-  <div class="chat-list" *ngIf="activeTab == 'chats'">
-    <div class="recent-chats ion-padding">
-      <div class="heading">
-        <h1>Recent Chats</h1>
-        <ion-icon name="search-sharp"></ion-icon>
-      </div>
-      <div class="chats">
-        <ion-item lines="none" (click)="openChat('5RC14gRWLT4DUZwMESIz')">
-         <ion-avatar slot="start">
-           <img src="https://i.pravatar.cc/300" />
-         </ion-avatar>
-         <ion-label class="ion-text-nowrap">
-           <h2>Bella</h2>
-           <p>Typing...</p>
-         </ion-label>
-         <div class="info-div">
-           <p>2:13</p>
-         </div>
-        </ion-item>
-        <ion-item lines="none" (click)="openChat()">
-          <ion-avatar slot="start">
-            <img src="https://i.pravatar.cc/320" />
-          </ion-avatar>
-          <ion-label class="ion-text-nowrap">
-            <h2>Mom</h2>
-            <p>Don't forget to use your mask</p>
-          </ion-label>
-          <div class="info-div">
-            <ion-badge>1</ion-badge>
-            <p>2:13</p>
-          </div>
-        </ion-item>
-        <ion-item lines="none" (click)="openChat()">
-          <ion-avatar slot="start">
-            <img src="https://i.pravatar.cc/324" />
-          </ion-avatar>
-          <ion-label class="ion-text-nowrap">
-            <h2>Victoria</h2>
-            <p>I'm out, wait for a few mins</p>
-          </ion-label>
-          <div class="info-div">
-            <ion-icon name="checkmark-done-outline"></ion-icon>
-            <p>2:13</p>
-          </div>
-        </ion-item>
-        <ion-item lines="none" (click)="openChat()">
-          <ion-avatar slot="start">
-            <img src="https://i.pravatar.cc/327" />
-          </ion-avatar>
-          <ion-label class="ion-text-nowrap">
-            <h2>Bee</h2>
-            <p>Ok, Take Care!</p>
-          </ion-label>
-          <div class="info-div">
-            <ion-badge>2</ion-badge>
-            <p>4:10</p>
-          </div>
-        </ion-item>
-      </div>
-    </div>
-  </div>
-  <div class="filler"></div>
-  <ion-fab-button>
-    <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-  </ion-fab-button>
+  <ion-header collapse="condense" *ngIf="platformService.isIOS">
+    <ion-toolbar>
+      <ion-title size="large">Chats</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-searchbar placeholder="Search"></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ion-item button detail="false" (click)="openChat('5RC14gRWLT4DUZwMESIz')" *ngFor="let chat of chatsList" [routerLink]="['/chat-detail', chat.id]"
+      routerdirection="forward">
+      <ion-avatar slot="start" style="width: 52px;height:52px">
+        <img [src]="chat.avatar">
+      </ion-avatar>
+      <ion-label>
+        {{chat.first_name}} {{chat.last_name}}
+        <small class="ion-float-right">
+          <ion-text color="medium">17.10.2020</ion-text>
+        </small>
+        <p>
+          <ion-text color="medium">
+            {{chat.last_message}}
+          </ion-text>
+        </p>
+        <p>&nbsp;</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
