@@ -70,14 +70,10 @@ export class ChatPage implements OnInit,ViewWillLeave {
         })
       })
     }).then(async (res: any)  => {
-      await this.delay(400) //Otherwise names dont load ka waurm 
+      await this.delay(400) //sunsch gond names names ned ka waurm 
       this.loadMessages(this.users)
     })
     
-  }
-
-  async showUser(userID){
-    return this.users.some(item => item.uid === userID)
   }
 
   async loadMessages(users){
@@ -134,6 +130,10 @@ export class ChatPage implements OnInit,ViewWillLeave {
       timestamp: this.getTimeStamp()
     })
 
+    this.db.collection('chats').doc(this.chatID).update({
+      last_message: this.newMsg
+    })
+
     this.newMsg = '';
     setTimeout(() => {
       this.content.scrollToBottom(200)
@@ -142,8 +142,8 @@ export class ChatPage implements OnInit,ViewWillLeave {
 
   paramCheck(){
     this.route.queryParams.subscribe(params => {
-      if (params && params.special) {
-        this.chatID = JSON.parse(params.special);
+      if (params && params.chat) {
+        this.chatID = JSON.parse(params.chat);
       }
       else{
         this.router.navigateByUrl('home')

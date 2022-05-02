@@ -1,7 +1,7 @@
 <ion-header>
 <ion-toolbar clasS="test">
   <ion-buttons slot="start">
-    <ion-back-button text="" defaultHref="home"></ion-back-button>
+    <ion-back-button text="" defaultHref="Chats"></ion-back-button>
   </ion-buttons>
 
   <ion-item lines="none" class="user-toolbar" *ngIf="user">
@@ -38,13 +38,13 @@
       <b>{{ message.username }}</b><br>
       <span>{{ message.message }}</span>
       <div class="time" text-right><br>
-      {{ message.timestamp.seconds * 1000 | date:'dd/MM/yyyy, h:mm' }}</div>
+      {{ message.timestamp.seconds * 1000 | date:'dd.MM.yyyy, h:mm' }}</div>
     </ion-col>
     <ion-col offset="3" size="9" *ngIf="currentUser === message.user" class="message my-message">
       <b>{{ message.username }}</b><br>
       <span>{{ message.message }}</span>
       <div class="time" text-right><br>
-      {{ message.timestamp.seconds * 1000 | date:'dd/MM/yy, h:mm' }}</div>
+      {{ message.timestamp.seconds * 1000 | date:'dd.MM.yy, h:mm' }}</div>
     </ion-col>
   </ion-row>
 </ion-grid>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NavigationExtras, Router } from '@angular/router';
-import { PlatformService } from '../services/platform.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +17,7 @@ export class HomePage {
   async openChat(chat){
     let navigationExtras: NavigationExtras = {
       queryParams: {
-        special: JSON.stringify(chat)
+        chat: JSON.stringify(chat)
       },
       replaceUrl: true
     };
