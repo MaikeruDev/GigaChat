@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AlertController } from '@ionic/angular';
+import { PresenceService } from './presence.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class AuthServiceService {
 
   uid: any;
 
-  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private alertController: AlertController) {
+  constructor(public presence: PresenceService, private afAuth: AngularFireAuth, private db: AngularFirestore, private alertController: AlertController) {
   }
 
   capitalizeFirstLetter(string) {

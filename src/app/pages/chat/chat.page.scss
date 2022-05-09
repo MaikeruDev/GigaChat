@@ -8,11 +8,18 @@
     --padding-start: 0px;
     padding-left: 45px;
     padding-right: 90px;
+    background-color: transparent;
+    --background: transparent;
 }
 
 .test{
     padding-top: 15px;
     padding-bottom: 15px
+}
+
+ion-label{
+    background-color: transparent;
+    --background: transparent;
 }
 
 ion-footer ion-toolbar {

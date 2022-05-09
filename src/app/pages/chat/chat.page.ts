@@ -92,15 +92,22 @@ export class ChatPage implements OnInit,ViewWillLeave {
             temp.username = user.name
           }
         })
-        this.content.scrollToBottom(200)
 
         this.messages.push(temp)
-        console.log(this.messages)
       });
-        setTimeout(() => {
+        setTimeout(async () => {
+          await this.delay(600)
           this.content.scrollToBottom(200)
         })
     })
+  }
+
+  async eventHandler(event){
+    if(event.keyCode == 13 && this.newMsg.trim()){
+      this.sendMessage()
+      this.newMsg = ""
+      event.preventDefault();
+    }
   }
 
   async loadExtraMessages(len){
@@ -138,10 +145,12 @@ export class ChatPage implements OnInit,ViewWillLeave {
       message: this.newMsg,
       user: this.currentUser,
       timestamp: this.getTimeStamp()
+    }).then(async () => {
+      this.newMsg = '';
     })
 
-    this.newMsg = '';
-    setTimeout(() => {
+    setTimeout(async () => {
+      await this.delay(600)
       this.content.scrollToBottom(200)
     })
   }

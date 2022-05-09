@@ -3,42 +3,31 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import * as firebase from 'firebase/app'
 import * as firestore from "firebase/firestore";
-import { first } from 'rxjs/operators';
+import { first, map, switchMap, tap } from 'rxjs/operators';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { of } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PresenceService {
 
-  constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) {
-    /* console.log('presence');
-    this.updateOnUser().subscribe();
-    this.updateOnDisconnect().subscribe();
-    this.updateOnAway(); */
-  }
-
-  getPresence(uid: string) {
-    this.db.collection('users').doc(uid).ref.get().then(async (user: any) => {
-      return user.data().last_seen
+  constructor(public http: HttpClient, public afAuth: AngularFireAuth, private db: AngularFirestore, private rdb: AngularFireDatabase) {
+    this.afAuth.user.subscribe(async (user: any) => {
+      var uid = user.uid
+      this.onlineCall(uid);
+      var id = setInterval(() => {
+        this.onlineCall(uid); 
+      }, 25000);
     })
   }
 
-  getUser(){
-    return this.afAuth.authState.pipe(first()).toPromise()
+  onlineCall(uid){
+    this.http.get('https://michael.prietl.com:23023/online?user=' + uid,{responseType: 'text'}).subscribe((e) => {
+      console.log(e)
+    })
   }
 
-  async setPresence(status: string) {
-    const user = await this.getUser()
-    if(user){
-      return this.db.collection('users').doc(user.uid).ref.update({
-        last_seen: status
-      })
-    }
-  }
-
-  /* updateOnUser(){
-    
-    var userStatusFirestoreRef = firebase.firestore().doc('/status/' + uid);
-    const connection = 
-  } */
 }

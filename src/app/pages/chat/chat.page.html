@@ -58,7 +58,7 @@
       <ion-icon slot="icon-only" name="add-outline" color="primary"></ion-icon>
     </ion-button>
   </ion-buttons>
-  <ion-textarea autoGrow rows="1" [(ngModel)]="newMsg"></ion-textarea>
+  <ion-textarea autoGrow rows="1" [(ngModel)]="newMsg" (keypress)="eventHandler($event)"></ion-textarea>
   <ion-buttons slot="end" *ngIf="!newMsg.trim()">
     <ion-button>
       <ion-icon slot="icon-only" name="camera-outline" color="primary"></ion-icon>

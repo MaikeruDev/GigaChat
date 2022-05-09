@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NavigationExtras, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform, ViewDidLeave, ViewWillLeave } from '@ionic/angular';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
+import { PresenceService } from 'src/app/services/presence.service';
 import { PlatformService } from '../../services/platform.service';
 import { NewChatPage } from '../new-chat/new-chat.page';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -13,9 +15,13 @@ import { NewChatPage } from '../new-chat/new-chat.page';
 })
 export class HomePage implements OnInit {
 
-  constructor(public authService: AuthServiceService, public modalController: ModalController, public db: AngularFirestore, public router: Router, public platformService: PlatformService,) {}
+  constructor(public http: HttpClient, public platform: Platform, public presence: PresenceService, public authService: AuthServiceService, public modalController: ModalController, public db: AngularFirestore, public router: Router, public platformService: PlatformService,) {
+    
+  }
 
-  chatsList = [{cid: "5RC14gRWLT4DUZwMESIz", name: "Mathias Johannsen", email: "mathias@johannsen.xyz", avatar: "https://hszteam.de/wp-content/uploads/2021/01/avatar-placeholder.gif", last_message: "amogus"}]
+  chatsList = []
+
+  presence$;
 
   uid: any;
 
@@ -23,6 +29,7 @@ export class HomePage implements OnInit {
     this.authService.userDetails().subscribe(async (user: any) => {
       this.uid = user.uid
       this.db.collection('users').doc(this.uid).ref.onSnapshot(async (me: any) => {
+        this.chatsList = []
         var chats = me.data().chats
         chats.forEach(chat => {
           this.db.collection('chats').doc(chat).ref.get().then(async (_chat: any) => {
@@ -43,6 +50,7 @@ export class HomePage implements OnInit {
         });
       })
     })
+    
   }
 
   async openChat(chat){
